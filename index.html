@@ -9,7 +9,7 @@
 
 <body>
     <h1>devtools</h1>
-    <div>Method 01 (width, height) ==> <span id="method01">false</span></div>
+    <div>Method 01 (Blob) ==> <span id="method01">false</span></div>
     <div>Method 02 (regex) ==> <span id="method02">false</span></div>
     <div>Method 03 (debugger) ==> <span id="method03">false</span></div>
     <div>Method w1 ==> <span id="methodw1">false</span></div>
@@ -24,16 +24,13 @@ function html(id, value, append) {
 }
 
 function method01() {
-    var element = new Image();
-    try {
-        Object.defineProperty(element, 'id', {
-            get: function() {
-                html('method01', true);
-            }
-        });
-        console.log('%c', element);
-    } catch (e) {}
-    
+    var el = new Blob()
+    Object.defineProperty(el, 'size', {
+        get() {
+            html('method01', true);
+        }
+    })
+    console.log('%c', el);
 }
 method01();
 

@@ -9,38 +9,76 @@
 
 <body>
     <h1>devtools</h1>
-    <div>Method 01 : <div id="method01">false</div>
-    </div>
-    <div>Method 02 : <div id="method02">false</div>
-    </div>
+    <div>Method 01 (width, height) ==> <span id="method01">false</span></div>
+    <div>Method 02 (regex) ==> <span id="method02">false</span></div>
+    <div>Method 03 (debugger) ==> <span id="method03">false</span></div>
+    <div>Method w1 ==> <span id="methodw1">false</span></div>
+    <div>Additional data ==> <span id="log"></span></div>
 </body>
 <script type="text/javascript">
-function html(id, value) {
-    document.getElementById(id).innerHTML = value;
+function html(id, value, append) {
+    if (!!append)
+        document.getElementById(id).innerHTML += value;
+    else
+        document.getElementById(id).innerHTML = value;
 }
 
 function method01() {
-    var devtools = /./;
-    devtools.toString = function() {
-        this.opened = true;
-        html('method01', true);
-    }
-    console.log('%c', devtools);
+    var element = new Image();
+    try {
+        Object.defineProperty(element, 'id', {
+            get: function() {
+                html('method01', true);
+            }
+        });
+        console.log('%c', element);
+    } catch (e) {}
+    
 }
 method01();
 
-
-
 function method02() {
-    var minimalUserResponseInMiliseconds = 100;
-    var before = new Date().getTime();
-    debugger;
-    var after = new Date().getTime();
-    if (after - before > minimalUserResponseInMiliseconds) {
+    var regex = /./;
+    regex.toString = function() {
+        this.opened = true;
         html('method02', true);
     }
+    console.log('%c', regex);
 }
 method02();
+
+function method03() {
+    var minimalUserResponseInMiliseconds = 100;
+    var before = new Date().getTime();
+    eval("debugger");
+    var after = new Date().getTime();
+    if (after - before > minimalUserResponseInMiliseconds) {
+        html('method03', true);
+    }
+}
+method03();
+
+function methodw1() {
+    var threshold = 160,
+        vertical = window.outerWidth - window.innerWidth > threshold,
+        horizontal = window.outerHeight - window.innerHeight > threshold,
+        devToolOrientation = vertical && horizontal ? '' : (vertical ? 'vertical' : (horizontal ? 'horizontal' : ''));
+    if (devToolOrientation)
+        html('methodw1', devToolOrientation);
+    html('log', JSON.stringify({
+        vertical: vertical,
+        horizontal: horizontal,
+        console: window.console
+    }));
+}
+methodw1();
+
+function log() {
+    html('log', JSON.stringify({
+        console: window.console
+    }), true);
+};
+log();
 </script>
 
 </html>

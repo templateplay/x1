@@ -9,7 +9,10 @@
 
 <body>
     <h1>devtools</h1>
-    <span>Method 01</span> : <dev id="method01">false</dev>
+    <div>Method 01 : <div id="method01">false</div>
+    </div>
+    <div>Method 02 : <div id="method02">false</div>
+    </div>
 </body>
 <script type="text/javascript">
 function html(id, value) {
@@ -20,12 +23,24 @@ function method01() {
     var devtools = /./;
     devtools.toString = function() {
         this.opened = true;
-        console.log('========>>> here');
         html('method01', true);
     }
     console.log('%c', devtools);
 }
 method01();
+
+
+
+function method02() {
+    var minimalUserResponseInMiliseconds = 100;
+    var before = new Date().getTime();
+    debugger;
+    var after = new Date().getTime();
+    if (after - before > minimalUserResponseInMiliseconds) {
+        html('method02', true);
+    }
+}
+method02();
 </script>
 
 </html>

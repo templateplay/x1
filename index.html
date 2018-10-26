@@ -12,8 +12,8 @@
     <div>Method 01 (Blob) ==> <span id="method01">false</span></div>
     <div>Method 02 (regex) ==> <span id="method02">false</span></div>
     <div>Method 03 (debugger) ==> <span id="method03">false</span></div>
-    <div>Method w1 ==> <span id="methodw1">false</span></div>
-    <div>Additional data ==> <span id="log"></span></div>
+    <div>Method 04 (width,height) ==> <span id="method4">false</span></div>
+    <div>Additional data ==> <span id="logger"></span></div>
 </body>
 <script type="text/javascript">
 function html(id, value, append) {
@@ -24,55 +24,63 @@ function html(id, value, append) {
 }
 
 function method01() {
-    var el = new Blob()
-    Object.defineProperty(el, 'size', {
-        get() {
-            html('method01', true);
-        }
-    })
-    console.log('%c', el);
+    try {
+        var el = new Blob()
+        Object.defineProperty(el, 'size', {
+            get() {
+                html('method01', true);
+            }
+        })
+        console.log('%c', el);
+    } catch (err) {}
 }
 method01();
 
 function method02() {
-    var regex = /./;
-    regex.toString = function() {
-        this.opened = true;
-        html('method02', true);
-    }
-    console.log('%c', regex);
+    try {
+        var regex = /./;
+        regex.toString = function() {
+            this.opened = true;
+            html('method02', true);
+        }
+        console.log('%c', regex);
+    } catch (err) {}
 }
 method02();
 
 function method03() {
-    var minimalUserResponseInMiliseconds = 100;
-    var before = new Date().getTime();
-    eval("debugger");
-    var after = new Date().getTime();
-    if (after - before > minimalUserResponseInMiliseconds) {
-        html('method03', true);
-    }
+    try {
+        var minimalUserResponseInMiliseconds = 100;
+        var before = new Date().getTime();
+        eval("debugger");
+        var after = new Date().getTime();
+        if (after - before > minimalUserResponseInMiliseconds) {
+            html('method03', true);
+        }
+    } catch (err) {}
 }
 method03();
 
-function methodw1() {
-    var threshold = 160,
-        vertical = window.outerWidth - window.innerWidth > threshold,
-        horizontal = window.outerHeight - window.innerHeight > threshold,
-        devToolOrientation = vertical && horizontal ? '' : (vertical ? 'vertical' : (horizontal ? 'horizontal' : ''));
-    if (devToolOrientation)
-        html('methodw1', devToolOrientation);
-    html('log', JSON.stringify({
-        vertical: vertical,
-        horizontal: horizontal,
-        console: window.console
-    }));
+function method4() {
+    try {
+        var threshold = 160,
+            vertical = window.outerWidth - window.innerWidth > threshold,
+            horizontal = window.outerHeight - window.innerHeight > threshold,
+            devToolOrientation = vertical && horizontal ? '' : (vertical ? 'vertical' : (horizontal ? 'horizontal' : ''));
+        if (devToolOrientation)
+            html('method4', devToolOrientation);
+        html('logger', JSON.stringify({
+            vertical: vertical,
+            horizontal: horizontal
+        }));
+    } catch (err) {}
 }
-methodw1();
+method4();
 
 function log() {
-    html('log', JSON.stringify({
-        console: window.console
+    html('logger', JSON.stringify({
+        console: window.console || '',
+        devtoolbar: window.__IE_DEVTOOLBAR_CONSOLE_COMMAND_LINE || ''
     }), true);
 };
 log();

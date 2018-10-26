@@ -27,10 +27,10 @@ function method01() {
     try {
         var el = new Blob()
         Object.defineProperty(el, 'size', {
-            get() {
+            get: function() {
                 html('method01', true);
             }
-        })
+        });
         console.log('%c', el);
     } catch (err) {}
 }
